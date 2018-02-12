@@ -13,9 +13,13 @@ public class Main {
 //		
 //		News BBC = new News("BBC");
 //		BBC.parseXML();
+//		BBC.printReelHTML();
 //		
 //		News Reuters = new News("Reuters");
 //		Reuters.parseXML();
+//		Reuters.printReelHTML();
+//		
+
 		
 		Weather minneapolis = new Weather("hourly","Minneapolis","MN","json");
 		System.out.println(minneapolis.response);

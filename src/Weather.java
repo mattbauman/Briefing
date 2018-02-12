@@ -29,24 +29,27 @@ public class Weather {
 	public void parseJSON() {
 
         JsonElement jelement = new JsonParser().parse(response);
-        System.out.println("JsonObject?: "+jelement.isJsonObject());
         JsonObject  jobject = jelement.getAsJsonObject();
-
-        
-        System.out.println("hourly_forecast is Array?: "+jobject.get("hourly_forecast").isJsonArray());
         JsonArray hourly_forecasts = jobject.get("hourly_forecast").getAsJsonArray();
         for (int i=0; i<hourly_forecasts.size(); i++) {
-//        	System.out.println(hourly_forecast.get(i));
-//        	System.out.println(hourly_forecast.get(i).isJsonObject());
         	JsonObject hourly_forecast = hourly_forecasts.get(i).getAsJsonObject();
         	
         	JsonObject FCTTIME = hourly_forecast.get("FCTTIME").getAsJsonObject();
-        	String pretty = FCTTIME.get("pretty").getAsString();
-        	System.out.println(pretty);
+        	if (i==0||FCTTIME.get("civil").getAsString().equals("12:00 AM")) {
+        		//weekday_name, month_name mday_padded year
+        		System.out.println(
+        				FCTTIME.get("weekday_name").getAsString()+", "+
+        				FCTTIME.get("month_name").getAsString()+" "+
+        				FCTTIME.get("mday_padded").getAsString()+" "+
+        				FCTTIME.get("year").getAsString()
+        				);
+        	}
+        	System.out.print("<li>");
+        	System.out.print(FCTTIME.get("civil").getAsString()+": ");
         	
         	JsonObject temp = hourly_forecast.get("temp").getAsJsonObject();
         	String english = temp.get("english").getAsString();
-        	System.out.println(english);
+        	System.out.println(english + "\u00b0"+"F"+"</li>");
         	
         }
         //JsonElement FCTTIME = ((JsonObject)hourly_forecast.get(0)).get("FCTTIME");

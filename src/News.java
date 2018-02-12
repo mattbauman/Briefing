@@ -10,29 +10,26 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class News {
-	String agency;
+	String agency, dataType, edition, response, endPoint;
 	String BBCEndPoint="http://feeds.bbci.co.uk/news/rss.xml?edition=us";
 	String ReutersEndPoint = "http://feeds.reuters.com/reuters/topNews";
-	String dataType;
-	String edition;
-	String response;
-	
+	int reelLimit = 10;
+	String[][] reel = new String[reelLimit][3];
 	
 	public News (String a) throws IOException {
 		agency = a;
-		String endPoint = null;
-		if (agency.equals("BBC")){
-			endPoint=BBCEndPoint;
-		}
-		else if (agency.equals("Reuters")) {
-			endPoint=ReutersEndPoint;
+		
+		switch(agency) {
+			case "BBC": endPoint=BBCEndPoint;
+			break;
+			case "Reuters": endPoint=ReutersEndPoint;
 		}
 
 		HTTP News = new HTTP(endPoint,"GET");
 		response=News.getResponse();
 	}	
 	
-	public void parseXML() { 
+	public void parseXML() {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         
@@ -41,33 +38,64 @@ public class News {
 	        Document doc = dBuilder.parse(new InputSource(new ByteArrayInputStream(response.getBytes("utf-8"))));
 	        doc.getDocumentElement().normalize();
 	        NodeList nList = doc.getElementsByTagName("item");
-	        
-
-	        for (int temp = 0; temp < 5; temp++) {
-				Node nNode = nList.item(temp);
+	        if (nList.getLength()<reelLimit) {
+	        	reelLimit=nList.getLength();
+	        }
+	        	;
+	        for (int i = 0; i<reelLimit; i++) { //Top 10 News Stories
+				Node nNode = nList.item(i);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					System.out.println("  <div class=\"w3-card-4 w3-margin w3-white\">");
-					System.out.println("  "+agency+" News");
-					System.out.println("    <div class=\"w3-container\">");
-					System.out.println(
-							"      <h5><b><a href=\""
-							+eElement.getElementsByTagName("link").item(0).getTextContent()+"\" target=\"_blank\">"
-							+eElement.getElementsByTagName("title").item(0).getTextContent() + "</a></b></h5>");
-					String description = eElement.getElementsByTagName("description").item(0).getTextContent();
+					
+					reel[i][0] = eElement.getElementsByTagName("title").item(0).getTextContent();
+					reel[i][1] = eElement.getElementsByTagName("description").item(0).getTextContent();
 					if (agency.equals("Reuters")) {
-						description = description.substring(0,description.indexOf("<div class=\"feedflare\">"));
+						reel[i][1] = reel[i][1].substring(0,reel[i][1].indexOf("<div class=\"feedflare\">"));
 					}
-					System.out.println("      <p>" + description + "</p>");
-					System.out.println("    </div>");
-					System.out.println("  </div>");
+					reel[i][2] = eElement.getElementsByTagName("link").item(0).getTextContent();
+
 				}
 			}
-	        System.out.println("<hr>");
+
 
  
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             e1.printStackTrace();
         }
+	}
+	
+	public void printReel() {
+		for (int i =0;i<reelLimit;i++) {
+			System.out.println("title: "+reel[i][0]);
+			System.out.println("description: "+reel[i][1]);
+			System.out.println("link: "+reel[i][2]);
+			System.out.println();
+			
+		}
+	}
+	
+	public void printReelHTML() {
+		for (int i =0;i<reelLimit;i++) {
+			
+			try {
+				System.out.println("  <div class=\"w3-card-4 w3-margin w3-white\">");
+				System.out.println("  "+agency+" News"+"("+(i+1)+")");
+				System.out.println("    <div class=\"w3-container\">");
+				System.out.println(
+						"      <h5><b><a href=\""
+						+reel[i][2]+"\" target=\"_blank\">"
+						+reel[i][0] + "</a></b></h5>");
+
+				System.out.println("      <p>" + reel[i][1] + "</p>");
+				System.out.println("    </div>");
+				System.out.println("  </div>");
+			} finally {
+				
+			}
+			
+
+		}
+
+        System.out.println("<hr>");
 	}
 }
