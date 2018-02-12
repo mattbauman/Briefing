@@ -18,6 +18,7 @@ public class Main {
 //		Reuters.parseXML();
 		
 		Weather minneapolis = new Weather("hourly","Minneapolis","MN","json");
+		System.out.println(minneapolis.response);
 		minneapolis.parseJSON();
 		
 

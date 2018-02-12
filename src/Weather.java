@@ -34,10 +34,21 @@ public class Weather {
 
         
         System.out.println("hourly_forecast is Array?: "+jobject.get("hourly_forecast").isJsonArray());
-        JsonArray hourly_forecast = jobject.get("hourly_forecast").getAsJsonArray();
-        System.out.println(hourly_forecast);
-        
-        
+        JsonArray hourly_forecasts = jobject.get("hourly_forecast").getAsJsonArray();
+        for (int i=0; i<hourly_forecasts.size(); i++) {
+//        	System.out.println(hourly_forecast.get(i));
+//        	System.out.println(hourly_forecast.get(i).isJsonObject());
+        	JsonObject hourly_forecast = hourly_forecasts.get(i).getAsJsonObject();
+        	
+        	JsonObject FCTTIME = hourly_forecast.get("FCTTIME").getAsJsonObject();
+        	String pretty = FCTTIME.get("pretty").getAsString();
+        	System.out.println(pretty);
+        	
+        	JsonObject temp = hourly_forecast.get("temp").getAsJsonObject();
+        	String english = temp.get("english").getAsString();
+        	System.out.println(english);
+        	
+        }
         //JsonElement FCTTIME = ((JsonObject)hourly_forecast.get(0)).get("FCTTIME");
         //System.out.println(FCTTIME.getAsString());
         
