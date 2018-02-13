@@ -74,28 +74,35 @@ public class News {
 		}
 	}
 	
-	public void printReelHTML() {
-		for (int i =0;i<reelLimit;i++) {
-			
-			try {
-				System.out.println("  <div class=\"w3-card-4 w3-margin w3-white\">");
-				System.out.println("  "+agency+" News"+"("+(i+1)+")");
-				System.out.println("    <div class=\"w3-container\">");
-				System.out.println(
-						"      <h5><b><a href=\""
-						+reel[i][2]+"\" target=\"_blank\">"
-						+reel[i][0] + "</a></b></h5>");
+	public void printReelHTML(int a) {
+		int i = a;
 
-				System.out.println("      <p>" + reel[i][1] + "</p>");
-				System.out.println("    </div>");
-				System.out.println("  </div>");
-			} finally {
-				
-			}
-			
+		System.out.println("  <div class=\"w3-card-4 w3-margin w3-white\">");
+		System.out.println("  "+agency+" News"+"("+(i+1)+")");
+		System.out.println("    <div class=\"w3-container\">");
+		System.out.println(
+				"      <h5><b><a href=\""
+				+reel[i][2]+"\" target=\"_blank\">"
+				+reel[i][0] + "</a></b></h5>");
 
-		}
+		System.out.println("      <p>" + reel[i][1] + "</p>");
+		System.out.println("    </div>");
+		System.out.println("  </div>");
+	}
+	
+	public void writeNewsReelPHP(int a, BufferedWriter b) throws IOException {
+		int i = a;
+		BufferedWriter writer = b;
+		writer.write("  <div class=\"w3-card-4 w3-margin w3-white\">");
+		writer.write("  "+agency+" News"+"("+(i+1)+")");
+		writer.write("    <div class=\"w3-container\">");
+		writer.write(
+				"      <h5><b><a href=\""
+				+reel[i][2]+"\" target=\"_blank\">"
+				+reel[i][0] + "</a></b></h5>");
 
-        System.out.println("<hr>");
+		writer.write("      <p>" + reel[i][1] + "</p>");
+		writer.write("    </div>");
+		writer.write("  </div>");
 	}
 }

@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 import com.google.gson.JsonArray;
@@ -50,7 +51,6 @@ public class Weather {
 	
 	
 	public void printHourlyWeatherHTML() {
-		System.out.println("<div class=\"w3-col l4\">");
 		for (int i =0;i<hourlyWeather.length;i++) {
 			if (i==0||hourlyWeather[i][1].equals("12:00 AM")) {
 				System.out.println("  <div class=\"w3-card-4 w3-margin w3-white\">");
@@ -66,9 +66,28 @@ public class Weather {
 				System.out.println("    </div>");
 				System.out.println("  </div>");
 			}
-			if (i==35) {
-				System.out.println("</div>");
+
+		}
+	}
+	
+	public void writeHourlyWeatherPHP(BufferedWriter a) throws IOException {
+		BufferedWriter writer = a;
+		for (int i =0;i<hourlyWeather.length;i++) {
+			if (i==0||hourlyWeather[i][1].equals("12:00 AM")) {
+				writer.write("  <div class=\"w3-card-4 w3-margin w3-white\">");
+				writer.write("    Weather");
+				writer.write("    <div class=\"w3-container w3-white\">");
+				writer.write("      <h4><b><a href=\"https://www.wunderground.com/hourly/us/"
+				+stateAbbr+"/"+city+"/date/"+hourlyWeather[i][3]+"\" target=\"_blank\">"+hourlyWeather[i][0]+"</a></b></h4>");
+				writer.write("      <ul>");
 			}
+			writer.write("        <li>"+hourlyWeather[i][1]+": "+hourlyWeather[i][2]+"\u00b0"+"F"+"</li>");
+			if (i==35||hourlyWeather[i][1].equals("11:00 PM")) {
+				writer.write("      </ul>");
+				writer.write("    </div>");
+				writer.write("  </div>");
+			}
+
 		}
 	}
 
