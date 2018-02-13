@@ -22,8 +22,8 @@ public class Main {
 
 		
 		Weather minneapolis = new Weather("hourly","Minneapolis","MN","json");
-		System.out.println(minneapolis.response);
 		minneapolis.parseJSON();
+		minneapolis.printHourlyWeatherHTML();
 		
 
 	}
