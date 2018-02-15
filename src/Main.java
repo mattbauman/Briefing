@@ -13,24 +13,26 @@ public class Main {
 		BBC.parseXML();		
 		News Reuters = new News("Reuters");
 		Reuters.parseXML();
-		int maxReelLimit=Reuters.reelLimit;
-		if (BBC.reelLimit>maxReelLimit) {
-			maxReelLimit=BBC.reelLimit;
+		String os = System.getProperty("os.name");
+		int newsStoryCount = 5;
+		Path newsPath;
+		if (os.equals("Windows 10")) {
+			newsPath = Paths.get("C:/Users/matt/Desktop/news_reels.php");			
+		} else {
+	        newsPath = Paths.get("/home/matt/stack/apache2/htdocs/mattbauman.com/briefing/news_reels.php");
 		}
-        //Path newsPath = Paths.get("C:/Users/matt/Desktop/news_reels.php");
-        Path newsPath = Paths.get("/home/matt/stack/apache2/htdocs/mattbauman.com/briefing/news_reels.php");
+        
         try (BufferedWriter newsWriter = Files.newBufferedWriter(newsPath))
         {
-    		newsWriter.write("<div class=\"w3-col l8 s12\">");
-    		for (int i =0;i<maxReelLimit;i++) {
-    			if (i<BBC.reelLimit) {
+
+    		for (int i =0;i<newsStoryCount;i++) {
+    			if (i<BBC.reel.length) {
     				BBC.writeNewsReelPHP(i,newsWriter);
     			}
-    			if (i<Reuters.reelLimit) {
+    			if (i<Reuters.reel.length) {
     				Reuters.writeNewsReelPHP(i,newsWriter);
     			}
     		}
-    		newsWriter.write("</div>");
         } catch (IOException ex) {
             
         }
@@ -38,24 +40,32 @@ public class Main {
 		//WEATHER
 		Weather minneapolis = new Weather("hourly","Minneapolis","MN","json");
 		minneapolis.parseJSON();
-//		Path hourlyWeatherPath = Paths.get("C:/Users/matt/Desktop/weather.php");
-		Path hourlyWeatherPath = Paths.get("/home/matt/stack/apache2/htdocs/mattbauman.com/briefing/weather.php");
+		Path hourlyWeatherPath;
+		if (os.equals("Windows 10")) {
+			hourlyWeatherPath = Paths.get("C:/Users/matt/Desktop/weather.php");			
+		} else {
+			hourlyWeatherPath = Paths.get("/home/matt/stack/apache2/htdocs/mattbauman.com/briefing/weather.php");
+		}
+
         try (BufferedWriter hourlyWeatherWriter = Files.newBufferedWriter(hourlyWeatherPath)){
-        	hourlyWeatherWriter.write("<div class=\"w3-col l4\">");
     		minneapolis.writeHourlyWeatherPHP(hourlyWeatherWriter);
-    		hourlyWeatherWriter.write("</div>");
         } catch (IOException ex) {
             
         }
 
-//		Stock SP500 = new Stock(".INX","json");
-//		System.out.println(SP500.endPoint);
-//		System.out.println(SP500.response);
-//		
-//		SP500.parseJSON();
-//		SP500.printStuff();
-//		
-//
+
+		StockCurrent SP500 = new StockCurrent(".INX","json");
+		System.out.println(SP500.endPoint);
+		System.out.println(SP500.response);
+		
+		SP500.parseJSON();
+		SP500.printStuff();
+		
+		StockHistorical VFFVX = new StockHistorical("VFFVX");
+		VFFVX.getHistorical();
+		VFFVX.createHistoricalStockJSON();
+		System.out.println(VFFVX.responseHistorical);	
+
 
 	}
 

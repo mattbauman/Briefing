@@ -4,18 +4,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-public class Stock {
+public class StockCurrent {
 	String endPointDomain = "https://finance.google.com/finance?q=";
 	
 	//Request values
 	String ticker, endPoint, dataType;
 
 	//Response values
-	String response, symbol, c, l, cp, ccol, op, hi, lo, vo, avvo, hi52, lo52;
+	String response, name, symbol, c, l, cp, ccol, op, hi, lo, vo, avvo, hi52, lo52, direction;
 
 	
 	
-	public Stock (String a, String b) throws IOException {
+	public StockCurrent (String a, String b) throws IOException {
 		ticker = a;
 		dataType = "&output="+b;
 		endPoint = endPointDomain+ticker+dataType;
@@ -32,22 +32,26 @@ public class Stock {
         JsonObject  jobject = jelement.getAsJsonObject();
         
         symbol = jobject.get("symbol").getAsString();
-        cp = jobject.get("cp").getAsString(); //change percent
-        c = jobject.get("c").getAsString(); //change
+        name = jobject.get("name").getAsString();
         l = jobject.get("l").getAsString(); //last trade
-        lo52 = jobject.get("lo52").getAsString(); //52 week low
-        hi52 = jobject.get("hi52").getAsString(); //52 week high  
+        c = jobject.get("c").getAsString(); //change
+        cp = jobject.get("cp").getAsString(); //change percent
+
+        if (c.substring(0,1).equals("-")) {
+        	direction="down";
+        } else {
+        	direction="up";
+        }
+
 	}
 	
 	
 	public void printStuff() {
-		System.out.println(symbol);
-		System.out.println("$"+l);
-		System.out.println(cp+"%");
-		System.out.println(c);
+		System.out.println(name+" ("+symbol+")");
+		System.out.println("$"+l+" "+c+" "+cp+"%");
+		System.out.println(direction);
+		System.out.println();
 
-		System.out.println("$"+lo52);
-		System.out.println("$"+hi52);
 
 	}
 	
