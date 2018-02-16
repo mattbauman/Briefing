@@ -29,16 +29,19 @@ public class News {
 		response=News.getResponse();
 	}	
 	
-	public void parseXML() {
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	public void parseXML(int a) {
+        int newsStoryCount=a;
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
-        
         try {
 			dBuilder = dbFactory.newDocumentBuilder();
 	        Document doc = dBuilder.parse(new InputSource(new ByteArrayInputStream(response.getBytes("utf-8"))));
 	        doc.getDocumentElement().normalize();
 	        NodeList nList = doc.getElementsByTagName("item");
-	        for (int i = 0; i<nList.getLength(); i++) {
+	        if (nList.getLength()<newsStoryCount) {
+	        	newsStoryCount=nList.getLength();
+	        }
+	        for (int i = 0; i<newsStoryCount; i++) {
 				Node nNode = nList.item(i);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
@@ -59,7 +62,6 @@ public class News {
 	public void writeNewsReelPHP(int a, BufferedWriter b) throws IOException {
 		int i = a;
 		BufferedWriter writer = b;
-		writer.write("<div class=\"w3-card-4 w3-margin w3-white\">");
 		String agencyEdition = null;
 		switch(agency) {
 		case "BBC": agencyEdition = "BBC US";
@@ -67,14 +69,17 @@ public class News {
 		case "Reuters": agencyEdition = "Reuters Top";
 		break;
 		}
-		writer.write(agencyEdition+" News"+"("+(i+1)+")");
-		writer.write("<div class=\"w3-container\">");
+		
 		writer.write(
-				"<h5><b><a href=\""
-				+reel[i][2]+"\" target=\"_blank\">"
-				+reel[i][0] + "</a></b></h5>");
-		writer.write("<p>" + reel[i][1] + "</p>");
-		writer.write("</div>");
-		writer.write("</div>");
+				"<div class=\"w3-card-4 w3-margin w3-white\">"+agencyEdition+" News"+"("+(i+1)+")"+"\r\n" + 
+				"	<div class=\"w3-container\">\r\n" + 
+				"		<h5><b><a href=\""+reel[i][2]+"\" target=\"_blank\">"+reel[i][0]+"</a></b></h5>\r\n" + 
+				"		<p>"+reel[i][1]+"</p>\r\n" + 
+				"	</div>\r\n" + 
+				"</div>"
+				);
+		
+		
+		
 	}
 }

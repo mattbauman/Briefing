@@ -3,19 +3,20 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class StockHistorical {
-    private final String ticker;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+public class Stock{
+    public String ticker;
 
     //Resonse StringBuilder
     public StringBuilder responseHistorical;
@@ -26,22 +27,46 @@ public class StockHistorical {
     private Integer timezoneInteger=0;
     private String timezoneString, unixTime;
     String[][] csv2DArray = new String[30][9];
-    String endPoint;
+    String historicalStockEndPoint;
     
     Date historicalDateTime; 
     SimpleDateFormat historicalDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
+	String currentStockEndPointDomain = "https://finance.google.com/finance?q=";
+	String historicalStockEndPointDomain = "https://finance.google.com/finance/getprices?q=";
+
+	//Current Stock values
+	String currentStockEndPoint, dataType, responseCurrent, name, symbol, c, l, cp, ccol, op, hi, lo, vo, avvo, hi52, lo52, direction;
+
     
-    public StockHistorical(String t){
+    public Stock(String t){
         ticker=t;
     }
 
+	public void getCurrent () throws IOException {
+		currentStockEndPoint = currentStockEndPointDomain+ticker+"&output=json";
+		//System.out.println(endPoint);
+		HTTP Stock = new HTTP(currentStockEndPoint,"GET");
+		responseCurrent=Stock.getResponse();
+		responseCurrent=responseCurrent.substring(3); //removing leading "// "
+		responseCurrent=responseCurrent.substring(1,responseCurrent.length()-1); //remove first [ and last ]
+		
+        JsonElement jelement = new JsonParser().parse(responseCurrent);
+        JsonObject  jobject = jelement.getAsJsonObject();
+        
+        symbol = jobject.get("symbol").getAsString();
+        name = jobject.get("name").getAsString();
+        l = jobject.get("l").getAsString(); //last trade
+        c = jobject.get("c").getAsString(); //change
+        cp = jobject.get("cp").getAsString(); //change percent
+
+
+	}
+	
 
     public void getHistorical() throws IOException{
-    	endPoint="https://finance.google.com/finance/getprices?q="+ticker+"&output=csv";
-    	System.out.println(endPoint);
-
-        URL url = new URL(endPoint);
+    	historicalStockEndPoint=historicalStockEndPointDomain+ticker+"&output=csv";
+        URL url = new URL(historicalStockEndPoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
@@ -110,47 +135,104 @@ public class StockHistorical {
         }
 
     }
+    
 
     
-    public void printHistoricalPrice(){
+	public void writeCurrentStockPHP(BufferedWriter a) throws IOException {
+		BufferedWriter writer = a;
+		boolean nullResponseCurrent;
+		
+		
+		try {
+			nullResponseCurrent = responseCurrent.isEmpty();
+		} catch (NullPointerException e) {
+			nullResponseCurrent=true;
+		}
+		
+		if (nullResponseCurrent) {
+			symbol=ticker;
+			if(symbol.equals("VFFVX")) {
+				name="Vanguard Target Retirement 2055 Fund Investor Shares";
+			} else {
+				name=ticker;
+			}
+
+			int lastTradeIndex=0;
+			for(int i = 0; i<csv2DArray.length; i++) {
+				if(csv2DArray[i][0] != null) {
+					lastTradeIndex=i;
+				}
+			}
+			l=csv2DArray[lastTradeIndex][1];
+			String ll=csv2DArray[lastTradeIndex-1][1];
+			
+			BigDecimal lBigDecimal = new BigDecimal(l);
+			BigDecimal llBigDecimal = new BigDecimal(ll);
+			BigDecimal cBigDecimal = lBigDecimal.subtract(llBigDecimal);
+			cBigDecimal = cBigDecimal.setScale(4);
+			BigDecimal cpBigDecimal = cBigDecimal.divide(lBigDecimal,4);
+			cpBigDecimal = cpBigDecimal.multiply(new BigDecimal(100));
+			cpBigDecimal = cpBigDecimal .setScale(2);
+			cBigDecimal = cBigDecimal .setScale(2);
+			
+			c=cBigDecimal.toString();
+			cp=cpBigDecimal.toString();
+			
+		}
+		
+		String fontColor="green";
+        if (c.substring(0,1).equals("-")) {
+        	fontColor = "red";
+        }
+        
+        //if no addition sign on c (change) - add one
+        if (!c.substring(0,1).equals("-")&&!c.substring(0,1).equals("+")) {
+        	c="+"+c;
+        } else {
+        	
+        	
+        }
+        
+        if (ticker.substring(0,1).equals(".")) {
+        	ticker=ticker.substring(1);
+        }
+		
+
+		
+		
+		writer.write(
+			"  <div class=\"w3-card-4 w3-margin w3-white\"  id=\"stock\">\r\n" + 
+			"  Stock\r\n" + 
+			"    <div class=\"w3-container w3-white\">\r\n" + 
+			"      <h5><b><a href=\"http://www.google.com/finance?q="+symbol+"\" target=\"_blank\">"+name+" ("+ticker+")</a></b></h5>\r\n" + 
+			"      <p>$"+l+" <font color=\""+fontColor+"\">"+c+" ("+cp+"%)</font></p>\r\n" + 
+			"    <div id=\""+ticker+"_chart_div\"></div>\r\n" + 
+			"    </div>\r\n" + 
+			"  </div>");
+	}
+	
+
+
+    
+    public void writeHistoricalStockJSON(BufferedWriter a) throws IOException {
+        BufferedWriter writer = a;
+        writer.write("{\n" +
+	        "  \"cols\": [\n" +
+	        "        {\"id\":\"\",\"label\":\"Date\",\"pattern\":\"\",\"type\":\"date\"},\n" +
+	        "        {\"id\":\"\",\"label\":\""+ticker+"\",\"pattern\":\"\",\"type\":\"number\"}\n" +
+	        "      ],\n" +
+	        "  \"rows\": [\n");
+
+
         for(int i=0; i<csv2DArray.length; i++){
             if (csv2DArray[i][0] != null && csv2DArray[i][0].length() > 0){
-                System.out.println(csv2DArray[i][5]+"\t"+"$"+csv2DArray[i][1]);
+            	writer.write("        {\"c\":[{\"v\":\"Date("+csv2DArray[i][6]+","+csv2DArray[i][7]+","+csv2DArray[i][8]+")\",\"f\":null},{\"v\":"+csv2DArray[i][1]+",\"f\":null}]},\n");                    
             }
         }
-    }
-    
-    public void createHistoricalStockJSON() {
-        //Get the file reference
-        Path path = Paths.get("/home/matt/stack/apache2/htdocs/mattbauman.com/briefing/stock/"+ticker+"_HistoricalStock.json");
-        String os = System.getProperty("os.name");
-        if (os.equals("Windows 10")) {
-    		path = Paths.get("C:/Users/matt/Desktop/"+ticker+"_HistoricalStock.json");			
-		}
 
+        writer.write("      ]\n" +
+        "}");
 
-        //Use try-with-resource to get auto-closeable writer instance
-        try (BufferedWriter writer = Files.newBufferedWriter(path))
-        {
-            writer.write("{\n" +
-            "  \"cols\": [\n" +
-            "        {\"id\":\"\",\"label\":\"Date\",\"pattern\":\"\",\"type\":\"date\"},\n" +
-            "        {\"id\":\"\",\"label\":\""+ticker+"\",\"pattern\":\"\",\"type\":\"number\"}\n" +
-            "      ],\n" +
-            "  \"rows\": [\n");
-
-
-            for(int i=0; i<csv2DArray.length; i++){
-                if (csv2DArray[i][0] != null && csv2DArray[i][0].length() > 0){
-                	writer.write("        {\"c\":[{\"v\":\"Date("+csv2DArray[i][6]+","+csv2DArray[i][7]+","+csv2DArray[i][8]+")\",\"f\":null},{\"v\":"+csv2DArray[i][1]+",\"f\":null}]},\n");                    
-                }
-            }
-
-            writer.write("      ]\n" +
-            "}");
-        } catch (IOException ex) {
-            
-        }
 
     
 
