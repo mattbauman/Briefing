@@ -53,6 +53,7 @@ public class Weather {
 	public void writeHourlyWeatherPHP(BufferedWriter a) throws IOException {
 		BufferedWriter writer = a;
 		for (int i =0;i<hourlyWeather.length;i++) {
+			//Write div open and table start
 			if (i==0||!hourlyWeather[i][3].equals(hourlyWeather[i-1][3])) {
 				writer.write(
 					"<div class=\"w3-card-4 w3-margin w3-white\">"+"\r\n"+
@@ -60,35 +61,27 @@ public class Weather {
 					"  <div class=\"w3-container w3-white\">"+"\r\n"+
 					"    <h5><b><a href=\"https://www.wunderground.com/hourly/us/"+
 					stateAbbr+"/"+city+"/date/"+hourlyWeather[i][3]+"\" target=\"_blank\">"+hourlyWeather[i][0]+"</a></b></h5>"+"\r\n");
-				if (i<29) { //6 hours hour 36.. 35-6=29
-					writer.write(
-							"      <table class=\"w3-table w3-bordered\">\r\n" + 
-							"        <thead>\r\n" + 
-							"          <tr class=\"w3-theme\">\r\n" + 
-							"            <th>Hour</th>\r\n" + 
-							"            <th>Condition</th>\r\n" + 
-							"            <th>Temperature</th>\r\n" + 
-							"          </tr>\r\n" + 
-							"        </thead>\r\n" +
-							"        <tbody>\r\n");
-				}
-
-			}
-			if (hourlyWeather[i][1].equals("6:00 AM")
-					||hourlyWeather[i][1].equals("9:00 AM")
-					||hourlyWeather[i][1].equals("12:00 PM")
-					||hourlyWeather[i][1].equals("3:00 PM")
-					||hourlyWeather[i][1].equals("6:00 PM")
-					||hourlyWeather[i][1].equals("9:00 PM")) {
 				writer.write(
-					"          <tr>\r\n" + 
-					"            <td>"+hourlyWeather[i][1]+"</td>\r\n" + 
-					"            <td>"+hourlyWeather[i][4]+"</td>\r\n" + 
-					"            <td>"+hourlyWeather[i][2]+"\u00b0 F</td>\r\n" + 
-					"          </tr>\r\n");
+					"      <table class=\"w3-table w3-bordered\">\r\n" + 
+					"        <thead>\r\n" + 
+					"          <tr class=\"w3-theme\">\r\n" + 
+					"            <th>Hour</th>\r\n" + 
+					"            <th>Condition</th>\r\n" + 
+					"            <th>Temperature</th>\r\n" + 
+					"          </tr>\r\n" + 
+					"        </thead>\r\n" +
+					"        <tbody>\r\n");
+			}
+			//Write body
+			writer.write(
+				"          <tr>\r\n" + 
+				"            <td>"+hourlyWeather[i][1]+"</td>\r\n" + 
+				"            <td>"+hourlyWeather[i][4]+"</td>\r\n" + 
+				"            <td>"+hourlyWeather[i][2]+"\u00b0 F</td>\r\n" + 
+				"          </tr>\r\n");
 
-				}
-			if (i==35||hourlyWeather[i][1].equals("9:00 PM")) {
+			//Write table end and div end
+			if (i==35||!hourlyWeather[i][3].equals(hourlyWeather[i+1][3])) {
 				writer.write(
 					"        </tbody>\r\n" +
 					"      </table>\r\n" +

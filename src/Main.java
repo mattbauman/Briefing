@@ -3,15 +3,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
+		
 		String os = System.getProperty("os.name");
 		String masterPathString = "/opt/bitnami/apache2/htdocs/mattbauman.com/briefing/";
 		if (os.equals("Windows 10")) {
 			masterPathString = "C:/Users/matt/Desktop/mattbauman.com/briefing/";		
 		}
+		System.out.println(LocalDateTime.now().toString().substring(0, 19));
+		Path runDateTimePath = 	Paths.get(masterPathString+"runDateTime.php");
+        try (BufferedWriter runDateTimeWriter = Files.newBufferedWriter(runDateTimePath)){
+        	runDateTimeWriter.write(LocalDateTime.now().toString().substring(0, 19));
+    		System.out.println(runDateTimePath);
+        }
 		Path newsPath = Paths.get(masterPathString+"news_reels.php");			
 		Path hourlyWeatherPath = Paths.get(masterPathString+"weather.php");
 		
@@ -43,6 +51,7 @@ public class Main {
         	minneapolis.writeHourlyWeatherPHP(hourlyWeatherWriter);  
         	System.out.println(hourlyWeatherPath);
         }
+        System.out.println(minneapolis.response);
 
         
         //Stock S&P 500
@@ -78,6 +87,7 @@ public class Main {
 			VFFVX.writeHistoricalStockJSON(historicalStockWriter);
 			System.out.println(historicalStockPathVFFVX);
 		}
+		System.out.println(LocalDateTime.now().toString().substring(0, 19));
 		
 	}
 }
