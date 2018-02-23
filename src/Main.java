@@ -26,17 +26,21 @@ public class Main {
 		
 		//NEWS
 		News BBC = new News("BBC");
-		int newsStoryCount = 5;
-		BBC.parseXML(newsStoryCount);		
+		BBC.parseXML();		
 		News Reuters = new News("Reuters");
-		Reuters.parseXML(newsStoryCount);
+		Reuters.parseXML();
+		News ReutersUS = new News("ReutersUS");
+		ReutersUS.parseXML();
         try (BufferedWriter newsWriter = Files.newBufferedWriter(newsPath)){
-    		for (int i=0;i<newsStoryCount;i++) {
+    		for (int i=0;i<BBC.reel.length&&i<Reuters.reel.length&&i<ReutersUS.reel.length;i++) {
     			if (i<BBC.reel.length) {
     				BBC.writeNewsReelPHP(i,newsWriter);
     			}
     			if (i<Reuters.reel.length) {
     				Reuters.writeNewsReelPHP(i,newsWriter);
+    			}
+    			if (i<ReutersUS.reel.length) {
+    				ReutersUS.writeNewsReelPHP(i,newsWriter);
     			}
     		}
     		System.out.println(newsPath);
@@ -51,7 +55,6 @@ public class Main {
         	minneapolis.writeHourlyWeatherPHP(hourlyWeatherWriter);  
         	System.out.println(hourlyWeatherPath);
         }
-        System.out.println(minneapolis.response);
 
         
         //Stock S&P 500
