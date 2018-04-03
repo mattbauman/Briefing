@@ -45,6 +45,7 @@ public class Stock{
 
 	public void getCurrent () throws IOException {
 		currentStockEndPoint = currentStockEndPointDomain+ticker+"&output=json";
+		System.out.println(currentStockEndPoint);
 		//System.out.println(endPoint);
 		HTTP Stock = new HTTP(currentStockEndPoint,"GET");
 		responseCurrent=Stock.getResponse();
@@ -66,6 +67,7 @@ public class Stock{
 
     public void getHistorical() throws IOException{
     	historicalStockEndPoint=historicalStockEndPointDomain+ticker+"&output=csv";
+    	System.out.println(historicalStockEndPoint);
         URL url = new URL(historicalStockEndPoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
