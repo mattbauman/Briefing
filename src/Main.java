@@ -68,11 +68,11 @@ public class Main {
 //			System.out.println(currentStockPathSP500);
 //		}
 //
-//		Path historicalStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+"_HistoricalStock.json");
-//		try (BufferedWriter historicalStockWriter = Files.newBufferedWriter(historicalStockPathSP500)){
-//			SP500.writeHistoricalStockJSON(historicalStockWriter);
-//			System.out.println(historicalStockPathSP500);
-//		}
+		Path historicalStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+"_HistoricalStock.json");
+		try (BufferedWriter historicalStockWriter = Files.newBufferedWriter(historicalStockPathSP500)){
+			SP500.writeHistoricalStockJSON(historicalStockWriter);
+			System.out.println(historicalStockPathSP500);
+		}
 		
 		//Stock Vanguard 2055 VFFVX
         Stock VFFVX = new Stock("VFFVX");
