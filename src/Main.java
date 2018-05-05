@@ -62,11 +62,11 @@ public class Main {
 //        SP500.getCurrent();
         SP500.getHistorical();
 //		
-//        Path currentStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker.substring(1)+".php");
-//		try (BufferedWriter currentStockWriter = Files.newBufferedWriter(currentStockPathSP500)){
-//			SP500.writeCurrentStockPHP(currentStockWriter);		
-//			System.out.println(currentStockPathSP500);
-//		}
+        Path currentStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+".php");
+		try (BufferedWriter currentStockWriter = Files.newBufferedWriter(currentStockPathSP500)){
+			SP500.writeCurrentStockPHP(currentStockWriter);		
+			System.out.println(currentStockPathSP500);
+		}
 //
 		Path historicalStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+"_HistoricalStock.json");
 		try (BufferedWriter historicalStockWriter = Files.newBufferedWriter(historicalStockPathSP500)){

@@ -36,7 +36,7 @@ public class Stock{
 	String historicalStockEndPointDomain = "https://finance.google.com/finance/getprices?q=";
 
 	//Current Stock values
-	String currentStockEndPoint, dataType, responseCurrent, name, symbol, c, l, cp, ccol, op, hi, lo, vo, avvo, hi52, lo52, direction;
+	String currentStockEndPoint, dataType, responseCurrent, name, symbol, c, l, cp, ccol, op, hi, lo, vo, avvo, hi52, lo52, direction, lDate;
 
     
     public Stock(String t){
@@ -155,7 +155,11 @@ public class Stock{
 			symbol=ticker;
 			if(symbol.equals("VFFVX")) {
 				name="Vanguard Target Retirement 2055 Fund Investor Shares";
-			} else {
+			} else if(symbol.equals(".INX")) {
+				name="S&P 500 Index";
+			}
+			
+			else {
 				name=ticker;
 			}
 
@@ -180,6 +184,44 @@ public class Stock{
 			c=cBigDecimal.toString();
 			cp=cpBigDecimal.toString();
 			
+			String lMonth;
+			
+			
+	        switch (csv2DArray[lastTradeIndex][7]) {
+            case "0":  lMonth = "January";
+                     break;
+            case "1":  lMonth = "February";
+                     break;
+            case "2":  lMonth = "March";
+                     break;
+            case "3":  lMonth = "April";
+                     break;
+            case "4":  lMonth = "May";
+                     break;
+            case "5":  lMonth = "June";
+                     break;
+            case "6":  lMonth = "July";
+                     break;
+            case "7":  lMonth = "August";
+                     break;
+            case "8":  lMonth = "September";
+                     break;
+            case "9": lMonth = "October";
+                     break;
+            case "10": lMonth = "November";
+                     break;
+            case "11": lMonth = "December";
+                     break;
+            default: lMonth = "Invalid month";
+                     break;
+	        }
+			
+			lDate = lMonth
+					+" "
+					+csv2DArray[lastTradeIndex][8]
+					+", "
+					+csv2DArray[lastTradeIndex][6];
+			System.out.println(lDate);
 		}
 		
 		String fontColor="green";
@@ -207,6 +249,7 @@ public class Stock{
 			"  Stock\r\n" + 
 			"    <div class=\"w3-container w3-white\">\r\n" + 
 			"      <h5><b><a href=\"http://www.google.com/finance?q="+symbol+"\" target=\"_blank\">"+name+" ("+ticker+")</a></b></h5>\r\n" + 
+			"      <p>"+lDate+"</p>\r\n" +
 			"      <p>$"+l+" <font color=\""+fontColor+"\">"+c+" ("+cp+"%)</font></p>\r\n" + 
 			"    <div id=\""+ticker+"_chart_div\"></div>\r\n" + 
 			"    </div>\r\n" + 
