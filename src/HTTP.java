@@ -19,6 +19,7 @@ public class HTTP {
 		URL url = new URL(request);
 	    HttpURLConnection con = (HttpURLConnection) url.openConnection();
 	    con.setRequestMethod(requestMethod);
+	    con.setRequestProperty("User-Agent", "Java");
 	    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 	    String inputLine;
 	    StringBuilder content = new StringBuilder();

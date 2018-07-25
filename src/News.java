@@ -18,6 +18,7 @@ public class News {
 	String ReutersUSEndPoint = "http://feeds.reuters.com/Reuters/domesticNews";
 	String NPRWorldNewsEndPoint = "https://www.npr.org/rss/rss.php?id=1004";
 	String PBSWorldNewsEndPoint = "https://www.pbs.org/newshour/feeds/rss/world";
+	String StarTribuneLocalNewsEndPoint = "http://www.startribune.com/local/index.rss2";
 
 	String[][] reel = new String[100][3];
 	
@@ -32,6 +33,10 @@ public class News {
 			case "NPR": endPoint=NPRWorldNewsEndPoint;
 			break;
 			case "PBS": endPoint=PBSWorldNewsEndPoint;
+			break;
+			case "Star Tribune": endPoint=StarTribuneLocalNewsEndPoint;
+			break;
+			
 		}
 
 		HTTP News = new HTTP(endPoint,"GET");
@@ -76,6 +81,10 @@ public class News {
 			case "NPR": agencyEdition = "NPR World";
 			break;
 			case "PBS": agencyEdition = "PBS World";
+			break;
+			case "Star Tribune": agencyEdition = "Star Tribune Local";
+			break;
+			
 		}
 		if(reel[i][0] != null) {
 			writer.write(
