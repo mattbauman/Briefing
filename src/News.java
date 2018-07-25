@@ -11,21 +11,27 @@ import org.xml.sax.SAXException;
 
 public class News {
 	String agency, dataType, edition, response, endPoint;
-	String BBCUSEndPoint="http://feeds.bbci.co.uk/news/rss.xml?edition=us";
-	String ReutersTopNewsEndPoint = "http://feeds.reuters.com/reuters/topNews";
+	//String BBCUSEndPoint="http://feeds.bbci.co.uk/news/rss.xml?edition=us";
+	String BBCWorldNewsEndPoint="http://feeds.bbci.co.uk/news/video_and_audio/world/rss.xml";
+	//String ReutersTopNewsEndPoint = "http://feeds.reuters.com/reuters/topNews";
+	String ReutersWorldNewsEndPoint = "http://feeds.reuters.com/Reuters/worldNews";
 	String ReutersUSEndPoint = "http://feeds.reuters.com/Reuters/domesticNews";
+	String NPRWorldNewsEndPoint = "https://www.npr.org/rss/rss.php?id=1004";
+	String PBSWorldNewsEndPoint = "https://www.pbs.org/newshour/feeds/rss/world";
+
 	String[][] reel = new String[100][3];
 	
 	public News (String a) throws IOException {
 		agency = a;
 		
 		switch(agency) {
-			case "BBC": endPoint=BBCUSEndPoint;
+			case "BBC": endPoint=BBCWorldNewsEndPoint;
 			break;
-			case "Reuters": endPoint=ReutersTopNewsEndPoint;
+			case "Reuters": endPoint=ReutersWorldNewsEndPoint;
 			break;
-			case "ReutersUS": endPoint=ReutersUSEndPoint;
+			case "NPR": endPoint=NPRWorldNewsEndPoint;
 			break;
+			case "PBS": endPoint=PBSWorldNewsEndPoint;
 		}
 
 		HTTP News = new HTTP(endPoint,"GET");
@@ -63,12 +69,13 @@ public class News {
 		BufferedWriter writer = b;
 		String agencyEdition = null;
 		switch(agency) {
-			case "BBC": agencyEdition = "BBC US";
+			case "BBC": agencyEdition = "BBC World";
 			break;
-			case "Reuters": agencyEdition = "Reuters Top";
+			case "Reuters": agencyEdition = "Reuters World";
 			break;
-			case "ReutersUS": agencyEdition = "Reuters US";
+			case "NPR": agencyEdition = "NPR World";
 			break;
+			case "PBS": agencyEdition = "PBS World";
 		}
 		if(reel[i][0] != null) {
 			writer.write(

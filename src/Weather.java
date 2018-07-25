@@ -57,7 +57,7 @@ public class Weather {
 			if (i==0||!hourlyWeather[i][3].equals(hourlyWeather[i-1][3])) {
 				writer.write(
 					"<div class=\"w3-card-4 w3-margin w3-white\">"+"\r\n"+
-					"  Weather"+"\r\n"+
+					"  Weather"+" ("+city+", "+stateAbbr+")\r\n"+
 					"  <div class=\"w3-container w3-white\">"+"\r\n"+
 					"    <h5><b><a href=\"https://www.wunderground.com/hourly/us/"+
 					stateAbbr+"/"+city+"/date/"+hourlyWeather[i][3]+"\" target=\"_blank\">"+hourlyWeather[i][0]+"</a></b></h5>"+"\r\n");
