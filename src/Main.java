@@ -66,40 +66,40 @@ public class Main {
         	System.out.println(hourlyWeatherPath);
         }
 
-        
-        //Stock S&P 500
-        Stock SP500 = new Stock(".INX");
-//        SP500.getCurrent();
-        SP500.getHistorical();
+//		Google Finance API deprecated 2018-08-01        
+//        //Stock S&P 500
+//        Stock SP500 = new Stock(".INX");
+////        SP500.getCurrent();
+//        SP500.getHistorical();
+////		
+//        Path currentStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+".php");
+//		try (BufferedWriter currentStockWriter = Files.newBufferedWriter(currentStockPathSP500)){
+//			SP500.writeCurrentStockPHP(currentStockWriter);		
+//			System.out.println(currentStockPathSP500);
+//		}
+////
+//		Path historicalStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+"_HistoricalStock.json");
+//		try (BufferedWriter historicalStockWriter = Files.newBufferedWriter(historicalStockPathSP500)){
+//			SP500.writeHistoricalStockJSON(historicalStockWriter);
+//			System.out.println(historicalStockPathSP500);
+//		}
 //		
-        Path currentStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+".php");
-		try (BufferedWriter currentStockWriter = Files.newBufferedWriter(currentStockPathSP500)){
-			SP500.writeCurrentStockPHP(currentStockWriter);		
-			System.out.println(currentStockPathSP500);
-		}
+//		//Stock Vanguard 2055 VFFVX
+//        Stock VFFVX = new Stock("VFFVX");
+////        VFFVX.getCurrent();
+//        VFFVX.getHistorical();
+//		
+//        Path currentStockPathVFFVX = Paths.get(masterPathString+"stock/"+VFFVX.ticker+".php");
+//		try (BufferedWriter currentStockWriter = Files.newBufferedWriter(currentStockPathVFFVX)){
+//			VFFVX.writeCurrentStockPHP(currentStockWriter);		
+//			System.out.println(currentStockPathVFFVX);
+//		}
 //
-		Path historicalStockPathSP500 = Paths.get(masterPathString+"stock/"+SP500.ticker+"_HistoricalStock.json");
-		try (BufferedWriter historicalStockWriter = Files.newBufferedWriter(historicalStockPathSP500)){
-			SP500.writeHistoricalStockJSON(historicalStockWriter);
-			System.out.println(historicalStockPathSP500);
-		}
-		
-		//Stock Vanguard 2055 VFFVX
-        Stock VFFVX = new Stock("VFFVX");
-//        VFFVX.getCurrent();
-        VFFVX.getHistorical();
-		
-        Path currentStockPathVFFVX = Paths.get(masterPathString+"stock/"+VFFVX.ticker+".php");
-		try (BufferedWriter currentStockWriter = Files.newBufferedWriter(currentStockPathVFFVX)){
-			VFFVX.writeCurrentStockPHP(currentStockWriter);		
-			System.out.println(currentStockPathVFFVX);
-		}
-
-		Path historicalStockPathVFFVX = Paths.get(masterPathString+"stock/"+VFFVX.ticker+"_HistoricalStock.json");
-		try (BufferedWriter historicalStockWriter = Files.newBufferedWriter(historicalStockPathVFFVX)){
-			VFFVX.writeHistoricalStockJSON(historicalStockWriter);
-			System.out.println(historicalStockPathVFFVX);
-		}
+//		Path historicalStockPathVFFVX = Paths.get(masterPathString+"stock/"+VFFVX.ticker+"_HistoricalStock.json");
+//		try (BufferedWriter historicalStockWriter = Files.newBufferedWriter(historicalStockPathVFFVX)){
+//			VFFVX.writeHistoricalStockJSON(historicalStockWriter);
+//			System.out.println(historicalStockPathVFFVX);
+//		}
 		System.out.println(LocalDateTime.now().toString().substring(0, 19));
 		
 	}
