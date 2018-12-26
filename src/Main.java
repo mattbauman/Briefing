@@ -33,10 +33,10 @@ public class Main {
 		NPR.parseXML();
 		News PBS = new News("PBS");
 		PBS.parseXML();
-		News ST = new News("Star Tribune");
-		ST.parseXML();
+//		News ST = new News("Star Tribune");
+//		ST.parseXML();
         try (BufferedWriter newsWriter = Files.newBufferedWriter(newsPath)){
-    		for (int i=0;i<20&&i<BBC.reel.length&&i<Reuters.reel.length&&i<NPR.reel.length&&i<PBS.reel.length&&i<ST.reel.length;i++) {
+    		for (int i=0;i<5;i++) {
     			if (i<Reuters.reel.length) {
     				Reuters.writeNewsReelPHP(i,newsWriter);
     			}
@@ -49,9 +49,9 @@ public class Main {
     			if (i<PBS.reel.length) {
     				PBS.writeNewsReelPHP(i,newsWriter);
     			}
-    			if (i<ST.reel.length) {
-    				ST.writeNewsReelPHP(i,newsWriter);
-    			}
+//    			if (i<ST.reel.length) {
+//    				ST.writeNewsReelPHP(i,newsWriter);
+//    			}
     		}
     		System.out.println(newsPath);
         }
